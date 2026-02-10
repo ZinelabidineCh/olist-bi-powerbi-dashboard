@@ -13,6 +13,8 @@
 
 ![Dashboard Static](dashboard_static.png)
 
+![Dashboard Demo]([https://github.com/ZinelabidineCh/olist-analytics-dashboard/blob/main/dashboard_demo.gif?raw=true](https://github.com/ZinelabidineCh/olist-analytics-dashboard/blob/main/dashboard_demo.gif))
+
 ### 📥 [Download the Dashboard Template (.pbit)](Olist_Analytics.pbit)
 *To view the interactive dashboard, download this template file and open it in Power BI Desktop.*
 
