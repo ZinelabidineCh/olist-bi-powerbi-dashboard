@@ -1,78 +1,69 @@
-# 🇧🇷 Olist E-Commerce: Strategic Analytics Dashboard
+# Phase 2: Strategic Business Intelligence & Data Modeling (Power BI)
 
 ![Power BI Badge](https://img.shields.io/badge/Power%20BI-Data%20Viz-yellow)
 ![SQL Badge](https://img.shields.io/badge/SQL-Analytics-orange)
 ![Status Badge](https://img.shields.io/badge/Status-Executive%20MVP-brightgreen)
 
-> **A strategic Business Intelligence solution analyzing 100k+ orders from the Brazilian E-Commerce market (2016-2018).**
+> **A strategic Business Intelligence solution transforming 100k+ Brazilian e-commerce records into executive-level insights.**
+
+## 🎯 The Objective
+This project represents the **Business Intelligence Layer** of my Olist trilogy. Building upon the local database engineered in [Phase 1: Python/SQL Foundation](https://github.com/ZinelabidineCh/olist-python-sql-foundation), I shifted focus from raw data exploration to **Enterprise Data Modeling** and **Strategic Reporting**.
 
 ---
 
-## 📊 Dashboard Preview
-*An interactive view of the Executive Dashboard, featuring dynamic filtering by Year and State.*
+## 📊 Dashboard Preview & Interactivity
+*Experience the dynamic filtering and drill-down capabilities of the Olist Executive Suite.*
 
 ![Dashboard Static](dashboard_static.png)
 
+### 🕹️ Live Demo
 ![Dashboard Demo](dashboard_demo.gif)
-
-### 📥 [Download the Dashboard Template (.pbit)](Olist_Analytics.pbit)
-*To view the interactive dashboard, download this template file and open it in Power BI Desktop.*
+*Note: The GIF demonstrates dynamic filtering by Year, State, and Product Category, showing real-time KPI updates and DAX measure recalculations.*
 
 ---
 
-## 🚀 Project Overview
-This project represents the **Business Intelligence Layer** of my Olist E-Commerce solution. While my previous engineering project focused on the *pipeline*, this project focuses on the *value*.
+## 🏗️ Architecture & Data Modeling
+To ensure high performance and analytical accuracy, I implemented a **Star Schema** architecture within Power BI:
 
-It processes transactional data to answer key business questions:
-* **Revenue Health:** Tracking the $16M sales performance over time.
-* **Customer Segmentation:** Identifying "Champions" vs. "Churned" users (RFM).
-* **Operational Efficiency:** Correlating delivery delays with review scores.
+* **Fact Table:** `Fact_Sales` (centralized revenue and order metrics).
+* **Dimension Tables:** `Dim_Date`, `Dim_Customer`, and `Dim_Product` for high-speed filtering and attribute slicing.
+* **DAX Logic:** Developed custom measures for **Year-over-Year (YoY) Growth**, **Average Order Value (AOV)**, and **Customer Lifetime Value (CLV)**.
 
-### 🔗 Relation to Data Engineering Project
-This dashboard is built on top of the data pipeline I engineered previously.
-* **Backend / ETL Pipeline:** [View the Python/SQL Source Code Here](https://github.com/ZinelabidineCh/brazilian-ecommerce-analysis)
-* **This Repository:** Focuses strictly on Data Modeling (Star Schema), DAX Measures, and Visualization.
+
 
 ---
 
-## 🏗️ Architecture & Workflow
-
-1.  **Data Modeling (Star Schema):**
-    * Designed a "Header/Detail" architecture in Power BI.
-    * **Fact Table:** `Fact_Sales` (Centralized revenue metrics).
-    * **Dimension Tables:** `Dim_Date` and `Dim_Customer` for high-performance filtering.
-2.  **Visualization:**
-    * **KPI Cards:** For immediate executive visibility ($16M Revenue, 99k Orders).
-    * **Trend Analysis:** Corrected granularity mismatches to show accurate daily/monthly trends.
-    * **Geospatial Analysis:** Mapped customer density to identify the "São Paulo" cluster.
-
----
-
-## 🔧 "Errors Faced" & Architectural Decisions
-During the interview and development process, I encountered specific challenges that required strategic pivots.
+## 🛠️ Challenges & Strategic Pivots (Troubleshooting)
 
 ### 1. The "Database Locked" Concurrency Issue
-* **The Challenge:** I originally architected a live ODBC connection between Power BI and SQLite to visualize RFM segments in real-time. However, SQLite's serverless locking mechanism caused errors when the Python ETL tried to write while Power BI was reading.
-* **The Solution:** I implemented a **Decoupled Architecture**, pivoting to a CSV-based ingestion layer for the dashboard. This ensures high availability for the executive view while the Python pipeline processes heavy transformations in the background.
+* **Problem:** Initial live ODBC connections to the SQLite database failed when the Python ETL script ran simultaneously (SQLite's file-locking mechanism).
+* **Solution:** Pivoted to a **Decoupled Architecture**. By using a structured export layer (CSV/Parquet), I ensured the dashboard remains highly available for executives while the data pipeline runs independently in the background.
 
-### 2. Date vs. DateTime Granularity
-* **The Challenge:** The Revenue Trend chart initially showed a single dot instead of a line. This was due to a granularity mismatch: `Dim_Date` was at midnight (`00:00:00`), while `Fact_Sales` contained precise timestamps.
-* **The Solution:** I used **Power Query** to transform the transaction column to `Date Only`, ensuring a valid One-to-Many relationship and accurate time-series trending.
+### 2. Time-Series Granularity Mismatch
+* **Problem:** Revenue charts initially failed to trend correctly because `Dim_Date` was at the day level while `Fact_Sales` used precise timestamps (seconds).
+* **Solution:** Used **Power Query (M)** to normalize transaction timestamps into `Date` formats, enabling a perfect One-to-Many relationship for accurate daily/monthly trending.
 
-### 3. SQL Logic: CTEs vs. Subqueries
-* **The Decision:** In the business logic layer, I explicitly chose **Common Table Expressions (CTEs)** over Subqueries.
-* **Why:** Calculating RFM (Recency, Frequency, Monetary) scores requires multi-step aggregation. Using CTEs allowed me to build the logic modularly (Clean -> Aggregate -> Score), significantly improving readability compared to nested subqueries.
-
----
-
-## 📂 Repository Contents
-
-| File | Description |
-| :--- | :--- |
-| `Olist_Analytics.pbit` | The Power BI Template file (Structure & Visuals). |
-| `dashboard_static.png` | High-res preview of the dashboard. |
-| `06_enterprise_rfm_analysis.sql` | The SQL logic used for customer segmentation. |
+### 3. Modular SQL for RFM Segmentation
+* **Decision:** I chose **Common Table Expressions (CTEs)** over nested subqueries to calculate Recency, Frequency, and Monetary (RFM) scores.
+* **Why:** This made the complex multi-step aggregation readable and maintainable—a key requirement for enterprise-grade SQL.
 
 ---
 
+## 📈 Visualizing Business Value
+* **Executive KPI Cards:** Immediate visibility into $16M Total Revenue and 99k Orders.
+* **Geospatial Insights:** Identified that the São Paulo hub accounts for the vast majority of sales, informing logistics and marketing priorities.
+* **Logistics Health:** Correlated delivery delays with 1-star reviews to pinpoint operational bottlenecks (identifying that low scores are 2x more likely when delivery exceeds 20 days).
+
+---
+
+## 🚀 The Journey Continues
+This project bridged the gap between raw code and business value. To see how I took this entire ecosystem to the **Cloud**, visit:
+* **[Phase 3: Production Cloud ELT (GCP & Looker)](https://github.com/ZinelabidineCh/olist-elt-pipeline-gcp-looker)**
+
+## 💻 Tech Stack
+- **Tools:** Power BI Desktop, Power Query (M)
+- **Logic:** DAX, SQL (CTEs, Joins, Window Functions)
+- **Modeling:** Star Schema (Fact/Dimension)
+
+---
 *Author: Zinelabidine Chiguer*
