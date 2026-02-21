@@ -18,7 +18,7 @@ This project represents the **Business Intelligence Layer** of my Olist trilogy.
 
 ### 🕹️ Live Demo
 ![Dashboard Demo](dashboard_demo.gif)
-*Note: The GIF demonstrates dynamic filtering by Year, State, and Product Category, showing real-time KPI updates and DAX measure recalculations.*
+*Note: The GIF demonstrates dynamic filtering by Year and State, showing real-time KPI updates and DAX measure recalculations.*
 
 ---
 
